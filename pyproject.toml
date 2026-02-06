@@ -1,0 +1,27 @@
+[project]
+name = "iceloadberg"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "postgres>=4.0",
+    "python-dateutil>=2.9.0.post0",
+    "pyyaml>=6.0.3",
+    "spark>=0.3.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0.2",
+    "ruff>=0.15.0",
+]
+
+[tool.ruff]
+extend = "../pyproject.toml"
+line-length = 100
+target_version = ["py313"]
+
+[build-system]
+requires = ["uv_build >= 0.9.28, <0.10.0"]
+build-backend = "uv_build"
