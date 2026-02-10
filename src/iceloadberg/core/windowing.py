@@ -7,7 +7,7 @@ from iceloadberg.ports.window import Window
 
 
 def parse_utc_iso(_timestamp: str) -> datetime:
-    """Parse an ISO 8601 timestamp in UTC."""
+    """Parse an ISO timestamp in UTC."""
     _timestamp = _timestamp.replace("Z", "+00:00")
     _datetime = datetime.fromisoformat(_timestamp).astimezone(timezone.utc)
     return _datetime
