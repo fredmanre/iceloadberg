@@ -1,14 +1,14 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Callable
 
 
-@dataclass
+@dataclass(slots=True)
 class Registry:
     """
     Minimal plugin registry. Maps config 'type' -> constructor(config) -> instance
     """
-    _items = dict[str, Callable[[dict[str, Any]], Any]]
+    _items: dict[str, Callable[[dict[str, Any]], Any]] = field(default_factory=dict)
 
     def register(self,
                  type_name: str,
@@ -25,9 +25,11 @@ class Registry:
         type_name = config.get("type")
         if not type_name:
             raise ValueError("Missing required field 'type' in config")
-        if type_name not in self._items:
+
+        constructor = self._items.get(type_name)
+        if constructor is None:
             raise ValueError(
                 f"Unknown type: '{type_name}'."
                 f"Registered: {sorted(self._items.keys())}"
             )
-        return self._items[type_name](config)
+        return constructor(config)
