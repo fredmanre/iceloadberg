@@ -24,10 +24,10 @@ class Source(Protocol):
 
     def read_window(self, spark: SparkSession, window: Window) -> DataFrame:
         """Return records for [window.start, window.end) in UTC."""
-        pass
+        raise NotImplementedError("subclass must implement read_window")
 
     def fingerprint(self, window: Window) -> str:
         """
         Deterministic description of the extraction for audit + safe retries.
         """
-        pass
+        raise NotImplementedError("subclass must implement fingerprint")
