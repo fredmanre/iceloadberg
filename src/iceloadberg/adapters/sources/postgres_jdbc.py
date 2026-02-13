@@ -43,8 +43,8 @@ class JDBCSource(Source):
             .option("user", self.config["user"])
             .option("password", self.config["password"])
             .option("driver", self.config.get("driver", "org.postgresql.Driver"))
-            .option("fetchsize", self.config.get("fetch_size", 10_000))
-            .query("query", sql)
+            .option("fetchsize", str(self.config.get("fetch_size", 10_000)))
+            .option("query", sql)
 
         return reader.load()
 
