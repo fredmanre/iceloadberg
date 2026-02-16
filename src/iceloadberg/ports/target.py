@@ -5,7 +5,7 @@ from iceloadberg.ports.window import Window
 
 try:
     from pyspark.sql import DataFrame, SparkSession
-except:
+except Exception:
     DataFrame = object
     SparkSession = object
 

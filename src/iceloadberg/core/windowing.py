@@ -8,6 +8,10 @@ from iceloadberg.ports.window import Window
 
 def parse_utc_iso(_timestamp: str) -> datetime:
     """Parse an ISO timestamp in UTC."""
+    if not _timestamp.endswith("Z"):
+        raise ValueError("Only UTC timestamps supported")
+    if isinstance(_timestamp, str) is not True:
+        raise ValueError("Expected string timestamp")
     _timestamp = _timestamp.replace("Z", "+00:00")
     _datetime = datetime.fromisoformat(_timestamp).astimezone(timezone.utc)
     return _datetime

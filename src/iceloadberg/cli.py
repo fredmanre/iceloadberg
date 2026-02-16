@@ -23,7 +23,7 @@ def build_spark(app_name: str) -> SparkSession:
 
 def main():
     parser = argparse.ArgumentParser(description="Run an Iceladberg migration job")
-    parser.add_argument("--c",
+    parser.add_argument("-c",
                         "--config",
                         required=True,
                         help="Path to the job configuration file")
@@ -41,7 +41,7 @@ def main():
 
     spark = build_spark(config["job_id"])
     context = JobContext(
-        job_id=config["job"]["id"],
+        job_id=config["job_id"],
         dataset=config["dataset"]["name"]
     )
 
@@ -56,7 +56,7 @@ def main():
         source=source,
         target=target,
         state_store=state,
-        transform=Transformer.apply,
+        transform=Transformer().apply,
         validate_counts=True
     )
     job.run()

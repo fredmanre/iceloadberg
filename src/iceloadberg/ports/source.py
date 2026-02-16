@@ -1,13 +1,14 @@
 from __future__ import annotations
-from typing import Protocol, runtime_checkable
+from typing import Protocol, runtime_checkable, TYPE_CHECKING
 
 from iceloadberg.ports.window import Window
 
 
-try:
-    from pyspark.sql import Dataframe, SparkSession
-except Exception:
-    Dataframe = object
+
+if TYPE_CHECKING:
+    from pyspark.sql import DataFrame, SparkSession
+else:
+    DataFrame = object
     SparkSession = object
 
 

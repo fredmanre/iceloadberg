@@ -15,7 +15,7 @@ class Window:
             raise ValueError("start and end must be timezone-aware")
         if self.start.tzinfo != timezone.utc or self.end.tzinfo != timezone.utc:
             raise ValueError("start and end must be in UTC")
-        if self.end < self.start:
+        if self.end <= self.start:
             raise ValueError("start must be < window.end")
 
     def key(self) -> str:
