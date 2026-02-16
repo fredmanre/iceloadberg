@@ -1,14 +1,17 @@
 from __future__ import annotations
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from iceloadberg.ports.target import Target
 from iceloadberg.ports.window import Window
 
-try:
+if TYPE_CHECKING:
     from pyspark.sql import DataFrame, SparkSession
-except Exception:  # pragma: no cover
-    DataFrame = object  # type: ignore
-    SparkSession = object  # type: ignore
+else:
+    try:
+        from pyspark.sql import DataFrame, SparkSession
+    except Exception:  # pragma: no cover
+        DataFrame = object  # type: ignore
+        SparkSession = object  # type: ignore
 
 
 class IcebergTarget(Target):
@@ -20,7 +23,7 @@ class IcebergTarget(Target):
         self.catalog = config["catalog"]
         self.database = config["database"]
         self.table = config["table"]
-        self.timestamp_column = config["timestamp_column", "trade_timestamp"]
+        self.timestamp_column = config.get("timestamp_column", "trade_timestamp")
         self.write_mode = config.get("write_mode", "overwrite_partitions")
 
     @property
