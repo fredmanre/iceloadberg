@@ -5,11 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "postgres>=4.0",
     "psycopg>=3.3.2",
+    "pyspark>=3.5.0",
     "python-dateutil>=2.9.0.post0",
     "pyyaml>=6.0.3",
-    "spark>=0.3.2",
 ]
 
 [project.optional-dependencies]
