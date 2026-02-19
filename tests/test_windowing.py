@@ -1,4 +1,5 @@
 from datetime import timezone, timedelta
+import pytest
 
 from iceloadberg.core.windowing import parse_utc_iso, generate_windows
 
@@ -68,3 +69,19 @@ def test_monthly_chunks_cover_exact_range():
     assert total == (end - start)
     # each chunk is <= 7 days, except maybe last if months don't divide evenly
     assert all((week.end - week.start) <= timedelta(days=7) for week in windows)
+
+
+def test_parse_utc_iso_rejects_non_string():
+    with pytest.raises(ValueError):
+        parse_utc_iso(123)  # type: ignore[arg-type]
+
+
+def test_generate_windows_rejects_non_positive_chunk_days():
+    configuration = {
+        "mode": "monthly_chunks",
+        "start": "2025-01-01T00:00:00Z",
+        "end": "2025-02-01T00:00:00Z",
+        "chunk_days": 0,
+    }
+    with pytest.raises(ValueError):
+        generate_windows(configuration)

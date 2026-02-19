@@ -22,7 +22,7 @@ def build_spark(app_name: str) -> SparkSession:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Run an Iceladberg migration job")
+    parser = argparse.ArgumentParser(description="Run an Iceloadberg migration job")
     parser.add_argument("-c",
                         "--config",
                         required=True,
@@ -39,9 +39,13 @@ def main():
     targets.register("iceberg", lambda c: IcebergTarget(c))
     states.register("postgres", lambda c: PostgresStateStore(c))
 
-    spark = build_spark(config["job_id"])
+    job_id = config.get("job", {}).get("id") or config.get("job_id")
+    if not job_id:
+        raise ValueError("Missing required job id. Use 'job.id' (preferred) or 'job_id'.")
+
+    spark = build_spark(job_id)
     context = JobContext(
-        job_id=config["job_id"],
+        job_id=job_id,
         dataset=config["dataset"]["name"]
     )
 

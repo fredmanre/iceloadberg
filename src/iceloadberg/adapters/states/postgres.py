@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 import psycopg
 
 from typing import Any
@@ -17,8 +19,16 @@ class PostgresStateStore(StateStore):
     def __init__(self, config: dict[str, Any]) -> None:
         self.config = config
         self.dsn = config["dsn"]
-        self.schema = config.get("schema", "public")
-        self.table = config.get("table", "migration_control_trades")
+        self.schema = self._validate_identifier(config.get("schema", "public"), "schema")
+        self.table = self._validate_identifier(config.get("table", "migration_control_trades"), "table")
+
+    @staticmethod
+    def _validate_identifier(value: str, field_name: str) -> str:
+        if not isinstance(value, str):
+            raise ValueError(f"{field_name} must be a string")
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", value):
+            raise ValueError(f"Invalid {field_name} identifier: {value!r}")
+        return value
 
     def _fqtn(self) -> str:
         """Fully-qualified table name."""
